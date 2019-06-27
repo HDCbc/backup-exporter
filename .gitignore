@@ -1,0 +1,8 @@
+.env
+.vscode
+build
+logs
+node_modules
+uploads
+working
+.vscode
