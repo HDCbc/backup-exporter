@@ -41,6 +41,9 @@ function get() {
     },
     // sourceDir: '/hdc/crypt/uploads',
     parallelImports: 10,
+    target: {
+      ssl: {},
+    },
   });
 
   // Create the configuration object.
