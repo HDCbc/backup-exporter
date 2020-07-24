@@ -41,6 +41,11 @@ function get() {
     },
     // sourceDir: '/hdc/crypt/uploads',
     parallelImports: 10,
+    target: {
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    },
   });
 
   // Create the configuration object.
@@ -92,6 +97,7 @@ function validate(config, callback) {
       database: Joi.string(),
       user: Joi.string(),
       password: Joi.string(),
+      ssl: Joi.object(),
     }),
     logger: Joi.object().keys({
       level: Joi.string().regex(/^(error|warn|info|verbose|debug|silly)$/),
@@ -108,9 +114,9 @@ function validate(config, callback) {
     presence: 'required', // All fields required by default
   };
   // Return result.
-  const result = Joi.validate(config, schema, validateOptions, callback);
+  const { error, value } = schema.validate(config, validateOptions);
 
-  return result;
+  return callback(error, value);
 }
 
 /**
