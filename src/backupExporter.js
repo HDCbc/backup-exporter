@@ -72,9 +72,9 @@ function processFile(
     restoreDatabase: ['createDatabase', (res, cb) => {
       let cmd;
       if (filepath.endsWith('.xz')) {
-        cmd = `xz --decompress --stdout "${filepath}" | grep -v "CHANGE MASTER" | mysql -f -D emr -u ${user} --password=${password}`;
+        cmd = `xz --decompress --stdout "${filepath}" | grep -v "CHANGE MASTER" | sed 's/PAGE_CHECKSUM=[0|1]//g'| mysql -f -D emr -u ${user} --password=${password}`;
       } else if (filepath.endsWith('.sql')) {
-        cmd = `cat "${filepath}" | grep -v "CHANGE MASTER" | mysql -f -D emr -u ${user} --password=${password}`;
+        cmd = `cat "${filepath}" | grep -v "CHANGE MASTER" | sed 's/PAGE_CHECKSUM=[0|1]//g'| mysql -f -D emr -u ${user} --password=${password}`;
       } else {
         cb(`Unhandled filetype for file ${filepath}`);
       }
