@@ -53,8 +53,16 @@ function runScriptFile(db, taskName, scriptPath, callback) {
 }
 
 function processFile(
-  db, filepath, workingDir, parallelImports,
-  processedExt, user, password, exporterCommand, exporterCwd, callback,
+  db,
+  filepath,
+  workingDir,
+  parallelImports,
+  processedExt,
+  user,
+  password,
+  exporterCommand,
+  exporterCwd,
+  callback,
 ) {
   logger.info('Process File Started', { filepath, workingDir });
   const start = Date.now();
@@ -168,9 +176,11 @@ function run(options) {
   const db = dbMysql;
   db.init(target);
   // Mask the password before logging.
-  const logOptions = Object.assign({}, options, {
-    target: Object.assign({}, options.target, { password: 'XXX' }),
-  });
+  const logOptions = {
+    ...options,
+    target: { ...options.target, password: 'XXX' },
+  };
+
   logger.verbose('Configuration');
   _.forEach(_.keys(logOptions), (key) => {
     logger.verbose(`-${key}`, { value: logOptions[key] });
@@ -180,8 +190,18 @@ function run(options) {
   // be processed one at a time.
   const queue = async.queue((filepath, cb) => {
     logger.verbose('File Queued', { filepath });
-    processFile(db, filepath, workingDir, parallelImports,
-      processedExt, user, password, exporterCommand, exporterCwd, cb);
+    processFile(
+      db,
+      filepath,
+      workingDir,
+      parallelImports,
+      processedExt,
+      user,
+      password,
+      exporterCommand,
+      exporterCwd,
+      cb,
+    );
   }, 1);
 
   // This function keeps the application running as long as it continues to watch for files.
