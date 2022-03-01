@@ -53,7 +53,7 @@ module.exports = ((config) => {
           winston.format.colorize(),
           winston.format.metadata(),
           winston.format.timestamp({ format: () => moment.tz(timezone).format(TIMESTAMP_FORMAT) }),
-          winston.format.printf(info => printf('%s %-18s %-30s %s', info.timestamp, info.level, info.message, info.metadata && Object.keys(info.metadata).length ? JSON.stringify(info.metadata) : '')),
+          winston.format.printf((info) => printf('%s %-18s %-30s %s', info.timestamp, info.level, info.message, info.metadata && Object.keys(info.metadata).length ? JSON.stringify(info.metadata) : '')),
         ),
       }),
       new winston.transports.File({
@@ -66,13 +66,13 @@ module.exports = ((config) => {
         format: winston.format.combine(
           winston.format.metadata(),
           winston.format.timestamp({ format: () => moment.tz(timezone).format(TIMESTAMP_FORMAT) }),
-          winston.format.printf(info => printf('%s  %-6s %-30s %s', info.timestamp, info.level, info.message, info.metadata && Object.keys(info.metadata).length ? JSON.stringify(info.metadata) : '')),
+          winston.format.printf((info) => printf('%s  %-6s %-30s %s', info.timestamp, info.level, info.message, info.metadata && Object.keys(info.metadata).length ? JSON.stringify(info.metadata) : '')),
         ),
       }),
     ],
   });
 
   const logger = winston.loggers.get('app');
-  logger.on('error', e => console.log('Logger Error', e)); // eslint-disable-line no-console
+  logger.on('error', (e) => console.log('Logger Error', e)); // eslint-disable-line no-console
   logger.log = expandErrors(logger);
 });
